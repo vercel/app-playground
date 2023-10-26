@@ -7,15 +7,14 @@ import { SingleProduct } from '#/app/streaming/_components/single-product';
 import { Ping } from '#/ui/ping';
 import { Suspense } from 'react';
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function Page() {
+  const params = {
+    id: '1',
+  }
   return (
     <div className="space-y-8 lg:space-y-14">
       {/* @ts-expect-error Async Server Component */}
-      <SingleProduct
-        data={fetch(
-          `https://app-router-api.vercel.app/api/products?id=${params.id}`,
-        )}
-      />
+      <SingleProduct id={params.id} />
 
       <div className="relative">
         <div className="absolute -left-4 top-2">
@@ -30,11 +29,11 @@ export default async function Page({ params }: { params: { id: string } }) {
           data={fetch(
             // We intentionally delay the reponse to simulate a slow data
             // request that would benefit from streaming
-            `https://app-router-api.vercel.app/api/products?delay=500&filter=${params.id}`,
+            `https://app-router-api.vercel.app/api/products?delay=0&filter=${params.id}`,
             {
               // We intentionally disable Next.js Cache to better demo
               // streaming
-              cache: 'no-store',
+              //cache: 'no-store',
             },
           )}
         />
@@ -52,11 +51,11 @@ export default async function Page({ params }: { params: { id: string } }) {
           data={fetch(
             // We intentionally delay the reponse to simulate a slow data
             // request that would benefit from streaming
-            `https://app-router-api.vercel.app/api/reviews?delay=1000`,
+            `https://app-router-api.vercel.app/api/reviews?delay=0`,
             {
               // We intentionally disable Next.js Cache to better demo
               // streaming
-              cache: 'no-store',
+              //cache: 'no-store',
             },
           )}
         />
@@ -64,3 +63,4 @@ export default async function Page({ params }: { params: { id: string } }) {
     </div>
   );
 }
+
